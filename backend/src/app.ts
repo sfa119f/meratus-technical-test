@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import orderRoutes from './routes/order';
 
 const app = express();
 
@@ -8,6 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
+app.use('/api/orders', orderRoutes);
 
 app.get('/', (req, res) => {
   res.json({
