@@ -104,11 +104,12 @@ export const cancelOrder = async (req: Request, res: Response) => {
 
 export const getListOrders = async (req: Request, res: Response) => {
   try {
-    const { status, sender, recipient, page = 1, limit = 10 } = req.query;
+    const { status, sender, recipient, id, page = 1, limit = 10 } = req.query;
 
     const { data, total } = await orderService.getListOrders({
       page: Number(page),
       limit: Number(limit),
+      id: id ? String(id) : undefined,
       status: status ? String(status) : undefined,
       sender: sender ? String(sender) : undefined,
       recipient: recipient ? String(recipient) : undefined,

@@ -74,6 +74,7 @@ export async function cancelOrder(id: string) {
 export async function getListOrders(params: {
   page: number;
   limit: number;
+  id?: string;
   status?: string;
   sender?: string;
   recipient?: string;
@@ -81,6 +82,14 @@ export async function getListOrders(params: {
   const offset = (Number(params.page) - 1) * Number(params.limit);
 
   const where: Prisma.OrderWhereInput = {};
+  if (params.id) {
+    Object.assign(where, {
+      id: {
+        contains: params.id,
+        mode: 'insensitive',
+      },
+    } as Prisma.OrderWhereInput);
+  }
   if (params.status && params.status !== 'all') {
     Object.assign(where, {
       status: params.status as $Enums.OrderStatus,
