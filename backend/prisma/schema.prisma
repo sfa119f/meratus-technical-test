@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model OrderIdCounter {
+  date		DateTime	@id @db.Date
+	counter	Int				@default(1)
+
+  @@map("order_id_counter")
+}
+
+enum OrderStatus {
+  PENDING @map("Pending")
+  IN_TRANSIT @map("In Transit")
+  DELIVERED @map("Delivered")
+  CANCELED @map("Canceled")
+}
+
+model Order {
+  id            String      @id @default(dbgenerated("gen_order_id()"))
+  senderName    String
+  recipientName String
+  origin        String
+  destination   String
+  status        OrderStatus @default(PENDING)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  
+  @@map("orders")
+  @@index([senderName])
+  @@index([recipientName])
+  @@index([status])
+}
